@@ -1,0 +1,4 @@
+
+- python is type independant
+
+- string and tuples are immutable (not change)
