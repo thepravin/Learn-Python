@@ -1,0 +1,6 @@
+INFO:root:This is first program
+WARNING:root:This is first worning
+ERROR:root:This is ERROR. . .
+2025-03-24 17:15:00,705 This is first program
+2025-03-24 17:15:00,737 This is first worning
+2025-03-24 17:15:00,762 This is ERROR. . .
