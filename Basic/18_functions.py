@@ -41,6 +41,7 @@ def greet(name,age):
 print(greet('Pravin',25)); #Pravin and age is 25
 
 #* 2. Default Arguments
+# - default arguments should be end not from start or midle
 def defaultArg(name="Guest"):
     return f"Hello, {name}!"
 

@@ -1,3 +1,14 @@
+
+'''
+# Data types :
+integers
+string
+float
+boolean
+none
+'''
+
+
 rating = 4.7
 name = "pravin"
 marks = 98
@@ -20,3 +31,6 @@ name2 = '''
  '''
 
 print(name2)
+
+a = None
+print(type(a))

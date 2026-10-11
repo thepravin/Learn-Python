@@ -17,6 +17,7 @@ if end not given bydefault 'size'
 
 print(fruit[1:4])
 print(fruit[1:5])
+print(fruit[-3:-1]) # pl
 
 #*-------------------------------------
 

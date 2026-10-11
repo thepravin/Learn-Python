@@ -1,8 +1,10 @@
 """ 
 - duplicate not allowed
-- a = {} // syntax
+- a = set() // syntax of empty set
+- a = {1,2,"pravin"}
 - indexing not support
-- mutable (changes allowed)
+- it is unordered
+- mutable (changes allowed) but values inside set is immutable
  """
 
 a = {1,2,4,5,5,3,4,5,6,6,1};
@@ -39,5 +41,25 @@ s = {1, (2, 3), "hello"}  # No error
 # These objects never change, so their hash values remain consistent, making them valid set elements.
 
 
-s = {1,[2,3]}
+# s = {1,[2,3]}
 # print(s) # TypeError: unhashable type: 'list'
+
+
+s = {1,2,34,5}
+
+print("len", len(s))
+
+s.add(99)
+print(s)
+
+s.remove(34)
+print(s)
+
+
+s.clear() # empties the set
+
+s.pop() # removes a random value
+
+
+s.union(s2) # combines both set values and returns new
+s.intersection(s2) # combine common values and returns new

@@ -11,6 +11,8 @@ print(a)
 a.sort()
 print(a)
 
+a.sort(reverse=True) # sorts in descending order
+print(a)
 
 print(a.count(4)) # 2
 a.pop() # remove last

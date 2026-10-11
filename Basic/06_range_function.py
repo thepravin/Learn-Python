@@ -1,6 +1,6 @@
 """ 
-* last number not include
-
+- last/stop number not include
+- range(start?, stop, step?)
  """
 
 a = range(10)

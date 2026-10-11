@@ -1,7 +1,7 @@
 """ 
 * List comprehension
 
-new_list = [expression   for item in list     if condition]
+new_list = [expression   for item in list   if condition]
 
  """
 

@@ -18,7 +18,20 @@ for i in a:
 
 a['name'] = 'ganesh'
 
+print(len(a))
 
+print(a.keys())
+print(list(a.keys()))
+
+print(a.values())
+print(list(a.values()))
+
+print(a.items())  # returns all (key,value) pairs as tuples
+print(list(a.items()))
+
+print(a.get("name"))
+print(a.update({"city":"pune"})) #inserts the specified items to dictionary
+print(a)
 
 #* If you want an immutable dictionary, use MappingProxyType from the types module.
 
