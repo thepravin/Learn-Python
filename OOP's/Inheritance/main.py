@@ -69,6 +69,10 @@ class D(B, C): # order matters : first check in B then C
 
 D().show()  
 print(D.__mro__) #  MRO (Method Resolution Order)
+print("\n")
+print(dir(D()))
+print("\n")
+print(vars(D()))
 
 '''
 MRO use C3 rules linearization :
