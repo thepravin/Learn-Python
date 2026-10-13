@@ -15,6 +15,11 @@ class Dog(object):
 
     def __init__(self,breed): # "self" should be the first argument in __init__ mthod
         self.breed = breed
+
+    def __del__(self):
+        # Destructor 
+        print(f"{self.name} closed")
+
         
 
 obj = Dog(breed="Lab")

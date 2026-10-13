@@ -1,3 +1,6 @@
+# methods start & end with __method__ is called Dunder methods ("double underscore" methods)
+
+
 # https://docs.python.org/3/reference/datamodel.html  => 3.3.8
 
 class Complex:
