@@ -9,18 +9,25 @@ def greet():
 
 
 products = [
-    Product(1, "phone", "budget phone", 99, 10),
-    Product(2, "laptop", "gaming laptop", 999, 5),
-    Product(3, "tablet", "10-inch tablet", 299, 8),
-    Product(4, "headphones", "noise cancelling headphones", 149, 15),
-    Product(5, "smartwatch", "fitness smartwatch", 199, 12),
-    Product(6, "keyboard", "mechanical keyboard", 79, 20),
-    Product(7, "mouse", "wireless mouse", 29, 25),
-    Product(8, "monitor", "27-inch 4K monitor", 349, 6),
-    Product(9, "speaker", "bluetooth speaker", 59, 18),
-    Product(10, "camera", "mirrorless camera", 799, 4),
+    Product(id=1, name="phone", description="budget phone", price=99, quantity=10),
+    Product(id=2, name="laptop", description="gaming laptop", price=999, quantity=5),
+    Product(id=3, name="tablet", description="10-inch tablet", price=299, quantity=8),
+    Product(id=4, name="headphones", description="noise cancelling headphones", price=149, quantity=15),
+    Product(id=5, name="smartwatch", description="fitness smartwatch", price=199, quantity=12),
+    Product(id=6, name="keyboard", description="mechanical keyboard", price=79, quantity=20),
+    Product(id=7, name="mouse", description="wireless mouse", price=29, quantity=25),
+    Product(id=8, name="monitor", description="27-inch 4K monitor", price=349, quantity=6),
+    Product(id=9, name="speaker", description="bluetooth speaker", price=59, quantity=18),
+    Product(id=10, name="camera", description="mirrorless camera", price=799, quantity=4),
 ]
 
 @app.get("/products")
 def get_all_products():
     return products
+
+@app.get("/product/{id}")
+def get_product_by_id(id:int):
+    for product in products:
+        if product.id == id:
+            return product
+    return f"Product not found..."
