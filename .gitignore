@@ -1,4 +1,81 @@
-.ipynb_checkpoints
-tempCodeRunnerFile.py
+# ==============================================================================
+# Bytcode & Cache
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.pytype/
 
-/logging.5d886fff-e6a3-44fd-bcca-8c61d36c1d18
+# ==============================================================================
+# Environments & Packages
+# ==============================================================================
+# Virtual environments (Standard conventions)
+.venv/
+venv/
+env/
+ENV/
+lib/
+lib64/
+
+# pipenv / poetry / pdm artifacts (if using them)
+.pdm.toml
+__pypackages__/
+poetry.toml
+
+# ==============================================================================
+# Configuration, Secrets, and Logs
+# ==============================================================================
+.env
+*.env
+.env.*
+*.local
+*.log
+pip-log.txt
+
+# ==============================================================================
+# Build & Distribution Artifacts
+# ==============================================================================
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==============================================================================
+# Testing & Code Coverage
+# ==============================================================================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# ==============================================================================
+# IDEs and Text Editors
+# ==============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store

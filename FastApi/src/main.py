@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.models import Product
+from src.models import Product, UpdateProduct
 from src.validation_handler import register_exception_handlers
 
 app = FastAPI()
@@ -39,3 +39,32 @@ def get_product_by_id(id:int):
 def add_product(product:Product):
     products.append(product)
     return product
+
+@app.put("/product/{id}")
+def update_product(id:int, product:UpdateProduct):
+    for index, existing in enumerate(products):
+        if existing.id == id:
+            updated = existing.model_copy(update=product.model_dump())
+            products[index] = updated
+            return "Product updated successfully..."
+
+    return "Product not found..."
+
+
+@app.patch("/product/{id}")
+def update_product(id:int, product:UpdateProduct):
+    for index, existing in enumerate(products):
+        if existing.id == id:
+            updated = existing.model_copy(update=product.model_dump(exclude_unset=True))
+            products[index] = updated
+            return "Product updated successfully..."
+
+    return "Product not found..."
+
+
+@app.delete("/product/{id}")
+def delete_product_by_id(id:int):
+    for index, product in enumerate(products):
+        if product.id == id:
+            del products[index]
+            return "Product deleted..."
