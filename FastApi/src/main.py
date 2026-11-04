@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from src.models import Product
+from src.validation_handler import register_exception_handlers
 
 app = FastAPI()
+register_exception_handlers(app)
 
 @app.get("/")
 def greet():
@@ -31,3 +33,9 @@ def get_product_by_id(id:int):
         if product.id == id:
             return product
     return f"Product not found..."
+
+
+@app.post("/product")
+def add_product(product:Product):
+    products.append(product)
+    return product
