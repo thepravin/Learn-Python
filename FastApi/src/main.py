@@ -1,9 +1,16 @@
 from fastapi import FastAPI
 from src.models import Product, UpdateProduct
 from src.validation_handler import register_exception_handlers
+from fastapi import Depends
+from db.connection import get_db,engine
+from  db.db_models import Base
 
 app = FastAPI()
 register_exception_handlers(app)
+db = Depends(get_db)
+Base.metadata.create_all(bind=engine)
+
+
 
 @app.get("/")
 def greet():
