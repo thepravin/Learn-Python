@@ -1,8 +1,15 @@
-from sqlalchemy import Integer, String, Numeric, CheckConstraint
+from sqlalchemy import Integer, String, Numeric, CheckConstraint, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from decimal import Decimal
 
 class Base(DeclarativeBase):
+    metadata = MetaData(naming_convention={
+        "ix": "ix_%(column_0_label)s",
+        "uq": "uq_%(table_name)s_%(column_0_name)s",
+        "ck": "ck_%(table_name)s_%(constraint_name)s",
+        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+        "pk": "pk_%(table_name)s",
+    })
     pass
 
 class Product(Base):
@@ -10,8 +17,8 @@ class Product(Base):
     __tablename__ = "products"
 
     __table_args__ = (
-        CheckConstraint("price > 0", name="ck_products_price_positive"),
-        CheckConstraint("quantity >= 0", name="ck_products_quantity_non_negative"),
+        CheckConstraint("price > 0", name="price_positive"),
+        CheckConstraint("quantity >= 0", name="quantity_non_negative"),
     )
 
     id: Mapped[int]=mapped_column(primary_key=True)

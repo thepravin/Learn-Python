@@ -9,7 +9,7 @@ db_url = URL.create(
     "postgresql+psycopg",
     username=os.environ["POSTGRES_USER"],
     password=os.environ["POSTGRES_PASSWORD"],
-    host="localhost",
+    host=os.environ["POSTGRES_HOST"],
     port= os.environ["POSTGRES_PORT"],
     database=os.environ["POSTGRES_DB"] ,
 )
