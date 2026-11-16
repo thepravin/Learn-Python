@@ -1,10 +1,16 @@
 from fastapi import FastAPI
-from src.models import Product, UpdateProduct
+from src.models import Product, UpdateProduct, ProductCreate
 from src.validation_handler import register_exception_handlers
-
+from typing import Annotated
+from sqlalchemy.orm import Session
+from sqlalchemy import select
+from fastapi import Depends
+from db.connection import get_db
+from db.db_models import Product as ProductDB
 
 app = FastAPI()
 register_exception_handlers(app)
+DbSession = Annotated[Session, Depends(get_db)]
 
 @app.get("/")
 def greet():
@@ -12,34 +18,29 @@ def greet():
 
 
 products = [
-    Product(id=1, name="phone", description="budget phone", price=99, quantity=10),
-    Product(id=2, name="laptop", description="gaming laptop", price=999, quantity=5),
-    Product(id=3, name="tablet", description="10-inch tablet", price=299, quantity=8),
-    Product(id=4, name="headphones", description="noise cancelling headphones", price=149, quantity=15),
-    Product(id=5, name="smartwatch", description="fitness smartwatch", price=199, quantity=12),
-    Product(id=6, name="keyboard", description="mechanical keyboard", price=79, quantity=20),
-    Product(id=7, name="mouse", description="wireless mouse", price=29, quantity=25),
-    Product(id=8, name="monitor", description="27-inch 4K monitor", price=349, quantity=6),
-    Product(id=9, name="speaker", description="bluetooth speaker", price=59, quantity=18),
-    Product(id=10, name="camera", description="mirrorless camera", price=799, quantity=4),
+    Product(id=1, name="phone", description="budget phone", price=99, quantity=10)
 ]
 
-@app.get("/products")
-def get_all_products():
-    return products
+@app.get("/products", response_model=list[Product])
+def get_all_products(db:DbSession):
+    stmt = select(ProductDB).order_by(ProductDB.id).limit(12).offset(0)
+    return db.scalars(stmt).all()
 
 @app.get("/product/{id}")
-def get_product_by_id(id:int):
-    for product in products:
-        if product.id == id:
-            return product
+def get_product_by_id(id:int, db:DbSession):
+    product = db.scalar(select(ProductDB).where(ProductDB.id == id))
+    if product:
+        return product
     return f"Product not found..."
 
 
-@app.post("/product")
-def add_product(product:Product):
-    products.append(product)
-    return product
+@app.post("/product", response_model=Product)
+def add_product(product:ProductCreate, db:DbSession):
+    new_product = ProductDB(**product.model_dump())
+    db.add(new_product)
+    db.commit()
+    db.refresh(new_product)
+    return new_product
 
 @app.put("/product/{id}")
 def update_product(id:int, product:UpdateProduct):

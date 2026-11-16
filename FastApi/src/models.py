@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class ProductBase(BaseModel):
     name: str = Field(min_length=1, max_length=100)
@@ -10,4 +10,9 @@ class UpdateProduct(ProductBase):
     pass
 
 class Product(ProductBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
+
+class ProductCreate(ProductBase):
+    pass
