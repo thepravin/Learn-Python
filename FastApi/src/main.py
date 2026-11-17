@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status, HTTPException
 from src.models import Product, UpdateProduct, ProductCreate
 from src.validation_handler import register_exception_handlers
 from typing import Annotated
@@ -7,6 +7,7 @@ from sqlalchemy import select
 from fastapi import Depends
 from db.connection import get_db
 from db.db_models import Product as ProductDB
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 register_exception_handlers(app)
@@ -65,8 +66,24 @@ def update_product(id:int, product:UpdateProduct):
 
 
 @app.delete("/product/{id}")
-def delete_product_by_id(id:int):
-    for index, product in enumerate(products):
-        if product.id == id:
-            del products[index]
-            return "Product deleted..."
+def delete_product_by_id(id:int, db:DbSession):
+    product = db.get(ProductDB, id)
+    if product is None:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success":False,
+                "message":"Product not available"
+            }
+        )
+    
+    db.delete(product)
+    db.commit()
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success":True,
+            "message":"Product deleted",
+            "id":id
+        }
+    )
