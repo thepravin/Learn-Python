@@ -1,9 +1,10 @@
 from fastapi import FastAPI, status, HTTPException
-from src.models import Product, UpdateProduct, ProductCreate
+from src.models import Product, UpdateProduct, ProductCreate, ProductPatch
 from src.validation_handler import register_exception_handlers
 from typing import Annotated
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from fastapi import Depends
 from db.connection import get_db
 from db.db_models import Product as ProductDB
@@ -17,10 +18,6 @@ DbSession = Annotated[Session, Depends(get_db)]
 def greet():
     return "Welcome to My Shop..."
 
-
-products = [
-    Product(id=1, name="phone", description="budget phone", price=99, quantity=10)
-]
 
 @app.get("/products", response_model=list[Product])
 def get_all_products(db:DbSession):
@@ -43,26 +40,37 @@ def add_product(product:ProductCreate, db:DbSession):
     db.refresh(new_product)
     return new_product
 
-@app.put("/product/{id}")
-def update_product(id:int, product:UpdateProduct):
-    for index, existing in enumerate(products):
-        if existing.id == id:
-            updated = existing.model_copy(update=product.model_dump())
-            products[index] = updated
-            return "Product updated successfully..."
-
-    return "Product not found..."
+def get_product_or_404(db: Session, id: int) -> ProductDB:
+    product = db.get(ProductDB, id)
+    if product is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Product {id} not found")
+    return product
 
 
-@app.patch("/product/{id}")
-def update_product(id:int, product:UpdateProduct):
-    for index, existing in enumerate(products):
-        if existing.id == id:
-            updated = existing.model_copy(update=product.model_dump(exclude_unset=True))
-            products[index] = updated
-            return "Product updated successfully..."
+def save_product_changes(db: Session, product: ProductDB, changes: dict) -> ProductDB:
+    for field, value in changes.items():
+        setattr(product, field, value)
 
-    return "Product not found..."
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Product could not be updated")
+
+    db.refresh(product)
+    return product
+
+
+@app.put("/product/{id}", response_model=Product, status_code=status.HTTP_200_OK)
+def replace_product(id: int, product: UpdateProduct, db: DbSession):
+    existing = get_product_or_404(db, id)
+    return save_product_changes(db, existing, product.model_dump())
+
+
+@app.patch("/product/{id}", response_model=Product, status_code=status.HTTP_200_OK)
+def patch_product(id: int, product: ProductPatch, db: DbSession):
+    existing = get_product_or_404(db, id)
+    return save_product_changes(db, existing, product.model_dump(exclude_unset=True))
 
 
 @app.delete("/product/{id}")
